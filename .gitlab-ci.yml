@@ -1,0 +1,69 @@
+---
+include:
+  - project: "Bigouden/gitlab-ci-templates"
+    file: ".gitlab-ci-docker.yml"
+  - project: "Bigouden/gitlab-ci-templates"
+    file: ".gitlab-ci-owasp-zap.yml"
+
+.services:
+  services:
+    - name: $CONTAINER_OPENSTACK_SWIFT
+      alias: swift
+      entrypoint: ["/init_ci.sh"]
+    - name: $CONTAINER_TEST_IMAGE
+      alias: exporter
+  image: $CONTAINER_CLIENT_IMAGE
+  before_script:
+    - apk add --no-cache --update curl
+  variables:
+    GIT_STRATEGY: none
+    AUTH_TYPE: "legacy"
+    ST_AUTH: "http://swift:8080/auth/v1.0" # DevSkim: ignore DS137138
+    ST_USER: "test:tester"
+    ST_KEY: "testing"
+    OPENSTACK_SWIFT_EXPORTER_LIST_CONTAINER: "test"
+    OPENSTACK_SWIFT_EXPORTER_RETRIES: 5
+  dependencies: []
+
+.services_owasp_zap:
+  services:
+    - name: $CONTAINER_OPENSTACK_SWIFT
+      alias: swift
+      entrypoint: ["/init_ci.sh"]
+    - name: $CONTAINER_TEST_IMAGE
+      alias: target
+  image:
+    name: $CONTAINER_OWASP_ZAP_IMAGE
+    entrypoint: [""]
+  variables:
+    GIT_STRATEGY: none
+    AUTH_TYPE: "legacy"
+    ST_AUTH: "http://swift:8080/auth/v1.0" # DevSkim: ignore DS137138
+    ST_USER: "test:tester"
+    ST_KEY: "testing"
+    OPENSTACK_SWIFT_EXPORTER_LIST_CONTAINER: "test"
+    OPENSTACK_SWIFT_EXPORTER_RETRIES: 5
+  dependencies: []
+
+variables:
+  PROMETHEUS_EXPORTER_PORT: "8123"
+  PROMETHEUS_EXPORTER_SCHEME: "http"
+  CI_DEBUG_SERVICES: "true"
+  CONTAINER_OPENSTACK_SWIFT: $CI_REGISTRY/bigouden/openstack-swift:daily
+  FF_NETWORK_PER_BUILD: 1
+  OWASP_ZAP_TARGET: ${PROMETHEUS_EXPORTER_SCHEME}://target:${PROMETHEUS_EXPORTER_PORT}
+
+stages:
+  - Quality
+  - Security
+  - Build
+  - Test
+  - Inspect
+  - Release
+  - Clean
+
+Prometheus Exporter:
+  stage: Test
+  extends: .services
+  script:
+    - curl -f --connect-timeout 60 ${PROMETHEUS_EXPORTER_SCHEME}://exporter:${PROMETHEUS_EXPORTER_PORT}/metrics

@@ -1,0 +1,8 @@
+certifi
+chardet
+idna
+prometheus_client
+python-swiftclient
+pytz
+requests
+urllib3
