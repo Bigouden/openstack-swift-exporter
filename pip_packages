@@ -2,6 +2,7 @@ certifi
 chardet
 idna
 oslo.serialization
+oslo.utils
 pbr
 prometheus_client
 python-keystoneclient
