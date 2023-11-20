@@ -182,7 +182,7 @@ AUTH_TYPE = os.environ.get("AUTH_TYPE", "keystone-v3")
 
 if AUTH_TYPE not in [auth["auth_type"] for auth in OS_AUTH]:
     logging.error(
-        "Invalid AUTH_TYPE environment variable (available: %s",
+        "Invalid AUTH_TYPE environment variable (available: %s)",
         ", ".join([str(auth["auth_type"]) for auth in OS_AUTH]),
     )
     os._exit(1)
