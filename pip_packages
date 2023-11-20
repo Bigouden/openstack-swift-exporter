@@ -1,10 +1,11 @@
 certifi
 chardet
 idna
+oslo.serialization
+pbr
 prometheus_client
 python-keystoneclient
 python-swiftclient
 pytz
-pbr
 requests
 urllib3
