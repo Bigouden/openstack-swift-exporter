@@ -2,6 +2,7 @@ certifi
 chardet
 idna
 prometheus_client
+python-keystoneclient
 python-swiftclient
 pytz
 requests
