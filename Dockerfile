@@ -12,7 +12,7 @@ FROM alpine:${ALPINE_VERSION}
 LABEL maintainer="Thomas GUIRRIEC <thomas@guirriec.fr>"
 ENV OPENSTACK_SWIFT_EXPORTER_PORT=8123
 ENV OPENSTACK_SWIFT_EXPORTER_LOGLEVEL='INFO'
-ENV OPENSTACK_SWIFT_EXPORTER_NAME='openstack_swift-exporter'
+ENV OPENSTACK_SWIFT_EXPORTER_NAME='openstack-swift-exporter'
 ENV SCRIPT="openstack_swift_exporter.py"
 ENV USERNAME="exporter"
 ENV UID="1000"
