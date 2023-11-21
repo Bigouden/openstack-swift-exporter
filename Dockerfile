@@ -3,7 +3,7 @@
 ARG ALPINE_VERSION="3.18"
 
 FROM alpine:${ALPINE_VERSION} AS builder
-COPY --link apk_packages pip_packages /tmp/
+COPY --link apk_packages apk_build_packages pip_packages /tmp/
 # hadolint ignore=DL3018
 RUN --mount=type=cache,id=builder_apk_cache,target=/var/cache/apk \
     apk add gettext-envsubst
@@ -24,11 +24,13 @@ RUN --mount=type=bind,from=builder,source=/usr/bin/envsubst,target=/usr/bin/envs
     --mount=type=bind,from=builder,source=/tmp,target=/tmp \
     --mount=type=cache,id=apk_cache,target=/var/cache/apk \
     --mount=type=cache,id=pip_cache,target=/root/.cache \
-    apk --update add `envsubst < /tmp/apk_packages` \
+    apk --update add --virtual .build-deps `envsubst < /tmp/apk_build_packages` \
+    && apk --update add `envsubst < /tmp/apk_packages` \
     && python3 -m venv "${VIRTUAL_ENV}" \
     && pip install --no-dependencies --no-binary :all: `envsubst < /tmp/pip_packages` \
     && pip uninstall -y setuptools pip \
-    && useradd -l -u "${UID}" -U -s /bin/sh "${USERNAME}"
+    && useradd -l -u "${UID}" -U -s /bin/sh "${USERNAME}" \
+    && apk del .build-deps
 COPY --link --chmod=755 entrypoint.sh /
 COPY --link --chmod=755 ${SCRIPT} ${VIRTUAL_ENV}
 WORKDIR ${VIRTUAL_ENV}
