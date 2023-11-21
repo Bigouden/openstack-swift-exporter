@@ -1,7 +1,9 @@
 certifi
 chardet
+debtcollector
 idna
 iso8601
+keystoneauth1
 oslo.serialization
 oslo.utils
 pbr
@@ -10,4 +12,6 @@ python-keystoneclient
 python-swiftclient
 pytz
 requests
+six
+stevedore
 urllib3
