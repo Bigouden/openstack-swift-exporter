@@ -18,7 +18,7 @@ ENV USERNAME="exporter"
 ENV UID="1000"
 ENV VIRTUAL_ENV="/openstack_swift-exporter"
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-# hadolint ignore=DL3013,DL3018,DL3042
+# hadolint ignore=DL3013,DL3018,DL3042,SC2006
 RUN --mount=type=bind,from=builder,source=/usr/bin/envsubst,target=/usr/bin/envsubst \
     --mount=type=bind,from=builder,source=/usr/lib/libintl.so.8,target=/usr/lib/libintl.so.8 \
     --mount=type=bind,from=builder,source=/tmp,target=/tmp \
