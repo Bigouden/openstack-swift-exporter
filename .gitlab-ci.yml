@@ -37,10 +37,6 @@ include:
   image:
     name: $CONTAINER_OWASP_ZAP_IMAGE
     entrypoint: [""]
-  before_script:
-    # Bypass for curl & c-ares
-    - apk add --no-cache --update bind-tools
-    - echo "$(host -t A target | awk '/has address/ { print $4 }') target" >> /etc/hosts
   variables:
     GIT_STRATEGY: none
     AUTH_TYPE: "legacy"
