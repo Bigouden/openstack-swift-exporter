@@ -8,10 +8,10 @@ include:
 .services:
   services:
     - name: $CONTAINER_OPENSTACK_SWIFT
-      alias: swift
+      alias: "swift"
       entrypoint: ["/init_ci.sh"]
     - name: $CONTAINER_TEST_IMAGE
-      alias: exporter
+      alias: "exporter"
   image: $CONTAINER_CLIENT_IMAGE
   before_script:
     - apk add --no-cache --update curl
