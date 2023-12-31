@@ -14,9 +14,9 @@ include:
       alias: "exporter"
   image: $CONTAINER_CLIENT_IMAGE
   before_script:
+    - apk add --no-cache --update curl bind-tools
     # Bypass for curl & c-ares
     - echo "$(host -t A exporter | awk '/has address/ { print $4 }') exporter" >> /etc/hosts
-    - apk add --no-cache --update curl
   variables:
     GIT_STRATEGY: none
     AUTH_TYPE: "legacy"
@@ -39,6 +39,7 @@ include:
     entrypoint: [""]
   before_script:
     # Bypass for curl & c-ares
+    - apk add --no-cache --update bind-tools
     - echo "$(host -t A target | awk '/has address/ { print $4 }') target" >> /etc/hosts
   variables:
     GIT_STRATEGY: none
