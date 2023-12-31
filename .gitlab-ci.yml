@@ -66,6 +66,7 @@ Prometheus Exporter:
   stage: Test
   extends: .services
   script:
+    - sleep 600
     - curl -f --retry 3 ${PROMETHEUS_EXPORTER_SCHEME}://exporter:${PROMETHEUS_EXPORTER_PORT}/metrics
 
 DockerHub (Enterprise):
