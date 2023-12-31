@@ -14,6 +14,8 @@ include:
       alias: "exporter"
   image: $CONTAINER_CLIENT_IMAGE
   before_script:
+    # Bypass for curl & c-ares
+    - echo "$(host -t A exporter | awk '/has address/ { print $4 }') exporter" >> /etc/hosts
     - apk add --no-cache --update curl
   variables:
     GIT_STRATEGY: none
@@ -35,6 +37,9 @@ include:
   image:
     name: $CONTAINER_OWASP_ZAP_IMAGE
     entrypoint: [""]
+  before_script:
+    # Bypass for curl & c-ares
+    - echo "$(host -t A target | awk '/has address/ { print $4 }') target" >> /etc/hosts
   variables:
     GIT_STRATEGY: none
     AUTH_TYPE: "legacy"
@@ -66,8 +71,7 @@ Prometheus Exporter:
   stage: Test
   extends: .services
   script:
-    - sleep 600
-    - curl -f --retry 3 ${PROMETHEUS_EXPORTER_SCHEME}://exporter:${PROMETHEUS_EXPORTER_PORT}/metrics
+    - curl -f --connect-timeout 60 ${PROMETHEUS_EXPORTER_SCHEME}://exporter:${PROMETHEUS_EXPORTER_PORT}/metrics
 
 DockerHub (Enterprise):
   stage: Release
