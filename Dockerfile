@@ -31,7 +31,7 @@ RUN --mount=type=bind,from=builder,source=/usr/bin/envsubst,target=/usr/bin/envs
     && pip uninstall -y setuptools pip \
     && useradd -l -u "${UID}" -U -s /bin/sh "${USERNAME}" \
     && apk del .build-deps
-COPY --link --chmod=755 entrypoint.sh /
+COPY --link --chmod=755 entrypoint.sh entrypoint_ci.sh /
 COPY --link --chmod=755 ${SCRIPT} ${VIRTUAL_ENV}
 WORKDIR ${VIRTUAL_ENV}
 EXPOSE ${OPENSTACK_SWIFT_EXPORTER_PORT}
