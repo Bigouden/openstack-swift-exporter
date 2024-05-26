@@ -232,6 +232,7 @@ class OpenstackSwiftCollector:
     """Openstack Swift Collector"""
 
     def __init__(self):
+        """Init"""
         pass
 
     @staticmethod
