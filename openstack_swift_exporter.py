@@ -120,6 +120,9 @@ OS_AUTH = [
     },
 ]
 
+LOGFMT = "%(asctime)s - %(levelname)s - %(message)s"
+DATEFMT = "%d/%m/%Y %H:%M:%S"
+
 # OPENSTACK SWIFT EXPORTER VARIABLES
 OPENSTACK_SWIFT_EXPORTER_NAME = os.environ.get(
     "OPENSTACK_SWIFT_EXPORTER_NAME", "openstack-swift-exporter"
@@ -152,8 +155,8 @@ try:
     ).timetuple()
     logging.basicConfig(
         stream=sys.stdout,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-        datefmt="%d/%m/%Y %H:%M:%S",
+        format=LOGFMT,
+        datefmt=DATEFMT,
         level=OPENSTACK_SWIFT_EXPORTER_LOGLEVEL,
     )
 except pytz.exceptions.UnknownTimeZoneError:
@@ -162,8 +165,8 @@ except pytz.exceptions.UnknownTimeZoneError:
     ).timetuple()
     logging.basicConfig(
         stream=sys.stdout,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-        datefmt="%d/%m/%Y %H:%M:%S",
+        format=LOGFMT,
+        datefmt=DATEFMT,
         level="INFO",
     )
     logging.error("TZ invalid : %s !", OPENSTACK_SWIFT_EXPORTER_TZ)
@@ -171,8 +174,8 @@ except pytz.exceptions.UnknownTimeZoneError:
 except ValueError:
     logging.basicConfig(
         stream=sys.stdout,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-        datefmt="%d/%m/%Y %H:%M:%S",
+        format=LOGFMT,
+        datefmt=DATEFMT,
         level="INFO",
     )
     logging.error("OPENSTACK_SWIFT_EXPORTER_LOGLEVEL invalid !")
@@ -232,7 +235,7 @@ class OpenstackSwiftCollector:
     """Openstack Swift Collector"""
 
     def __init__(self):
-        pass
+        """Init"""
 
     @staticmethod
     def _list_swift_container():
